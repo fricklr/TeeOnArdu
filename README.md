@@ -25,8 +25,8 @@ After trying different routes to include USB MIDI into Leonardo i decided to cre
 
 There were two stumble stones:
 
-*    Teensy and Leonardo have a different board layout so the pin number assignment is different. I changed that in pins_arduino.h/pins_teensy.c & core_pins.h - this is not well tested but seems to work (alpha)
-*    there is a bug in the bootloader of the Leonardo (called Caterina) which prevents the execution of the Teensy code - it hangs right after the bootloader timed out. I found the solution for that in the [AVRFreaks forum](http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=123862) and changed the bootloader accordingly. It's included in TeeOnArdu>bootloaders>caterina. You have to burn it to your Leonardo to use TeeOnArdu. (you can use another Arduino to do it - look at [ArduinoISP](http://arduino.cc/en/Tutorial/ArduinoISP))
+1.    Teensy and Leonardo have a different board layout so the pin number assignment is different. I changed that in pins_arduino.h/pins_teensy.c & core_pins.h - this is not well tested but seems to work (alpha)
+2.    there is a bug in the bootloader of the Leonardo (called Caterina) which prevents the execution of the Teensy code - it hangs right after the bootloader timed out. I found the solution for that in the [AVRFreaks forum](http://www.avrfreaks.net/index.php?name=PNphpBB2&file=viewtopic&t=123862) and changed the bootloader accordingly. It's included in TeeOnArdu>bootloaders>caterina. You have to burn it to your Leonardo to use TeeOnArdu. (you can use another Arduino to do it - look at [ArduinoISP](http://arduino.cc/en/Tutorial/ArduinoISP))
 
 How to use it
 -------------
