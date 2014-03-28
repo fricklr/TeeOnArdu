@@ -49,6 +49,6 @@ Authors
 based on work of
 ----------------
 *	Paul J Stoffregen  -  Teensy code [www.pjrc.com](http://www.pjrc.com)
-*	Dean Camera  -  LUFA [www.fourwalledcubicle.com](http://www.fourwalledcubicle.com)
+*	Dean Camera  -  LUFA (base of the Leonardo bootloader) [www.fourwalledcubicle.com](http://www.fourwalledcubicle.com)
 
    
