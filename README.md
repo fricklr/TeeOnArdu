@@ -45,6 +45,9 @@ Authors
 -------
 
 *	Georg Werner  -  port Teenys code to Arduino Leonardo IDE [georgwerner.de](http://georgwerner.de)
+
+based on work of
+----------------
 *	Paul J Stoffregen  -  Teensy code [www.pjrc.com](http://www.pjrc.com)
 *	Dean Camera  -  LUFA [www.fourwalledcubicle.com](http://www.fourwalledcubicle.com)
 
