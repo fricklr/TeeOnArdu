@@ -47,17 +47,17 @@ class Print
 	size_t print(const char s[])			{ return write(s); }
 	size_t print(const __FlashStringHelper *f);
 
-	size_t print(uint8_t b)				{ return printNumber(b, 10, 0); }
+	size_t print(uint8_t b)				{ return printNumber(b, 0, 10); }
 	size_t print(int n)				{ return print((long)n); }
-	size_t print(unsigned int n)			{ return printNumber(n, 10, 0); }
+	size_t print(unsigned int n)			{ return printNumber(n, 0, 10); }
 	size_t print(long n);
-	size_t print(unsigned long n)			{ return printNumber(n, 10, 0); }
+	size_t print(unsigned long n)			{ return printNumber(n, 0, 10); }
 
-	size_t print(unsigned char n, int base)		{ return printNumber(n, base, 0); }
-	size_t print(int n, int base)			{ return (base == 10) ? print(n) : printNumber(n, base, 0); }
-	size_t print(unsigned int n, int base)		{ return printNumber(n, base, 0); }
-	size_t print(long n, int base)			{ return (base == 10) ? print(n) : printNumber(n, base, 0); }
-	size_t print(unsigned long n, int base)		{ return printNumber(n, base, 0); }
+	size_t print(unsigned char n, int base)		{ return printNumber(n, 0, base); }
+	size_t print(int n, int base)			{ return (base == 10) ? print(n) : printNumber(n, 0, base); }
+	size_t print(unsigned int n, int base)		{ return printNumber(n, 0, base); }
+	size_t print(long n, int base)			{ return (base == 10) ? print(n) : printNumber(n, 0, base); }
+	size_t print(unsigned long n, int base)		{ return printNumber(n, 0, base); }
 
 	size_t print(double n, int digits = 2)		{ return printFloat(n, digits); }
 	size_t print(const Printable &obj)		{ return obj.printTo(*this); }
@@ -87,7 +87,20 @@ class Print
 	void setWriteError(int err = 1) { write_error = err; }
   private:
 	char write_error;
-	size_t printNumber(unsigned long n, uint8_t base, uint8_t sign);
+	size_t printNumberDec(unsigned long n, uint8_t sign);
+	size_t printNumberHex(unsigned long n);
+	size_t printNumberBin(unsigned long n);
+	size_t printNumberAny(unsigned long n, uint8_t base);
+	inline size_t printNumber(unsigned long n, uint8_t sign, uint8_t base) __attribute__((always_inline)) {
+		// when "base" is a constant (pretty much always), the
+		// compiler optimizes this to a single function call.
+		if (base == 0) return write((uint8_t)n);
+		if (base == 10 || base < 2) return printNumberDec(n, sign);
+		//if (base == 10 || base < 2) return printNumberAny(n, 10); // testing only
+		if (base == 16) return printNumberHex(n);
+		if (base == 2) return printNumberBin(n);
+		return printNumberAny(n, base);
+	}
 	size_t printFloat(double n, uint8_t digits);
 };
 
@@ -105,15 +118,15 @@ class Print
 
 	void print(uint8_t b)				{ write(b); }
 	void print(int n)				{ print((long)n); }
-	void print(unsigned int n)			{ printNumber(n, 10, 0); }
+	void print(unsigned int n)			{ printNumber(n, 0, 10); }
 	void print(long n);
-	void print(unsigned long n)			{ printNumber(n, 10, 0); }
+	void print(unsigned long n)			{ printNumber(n, 0, 10); }
 
-	void print(unsigned char n, int base)		{ printNumber(n, base, 0); }
-	void print(int n, int base)			{ (base == 10) ? print(n) : printNumber(n, base, 0); }
-	void print(unsigned int n, int base)		{ printNumber(n, base, 0); }
-	void print(long n, int base)			{ (base == 10) ? print(n) : printNumber(n, base, 0); }
-	void print(unsigned long n, int base)		{ printNumber(n, base, 0); }
+	void print(unsigned char n, int base)		{ printNumber(n, 0, base); }
+	void print(int n, int base)			{ (base == 10) ? print(n) : printNumber(n, 0, base); }
+	void print(unsigned int n, int base)		{ printNumber(n, 0, base); }
+	void print(long n, int base)			{ (base == 10) ? print(n) : printNumber(n, 0, base); }
+	void print(unsigned long n, int base)		{ printNumber(n, 0, base); }
 
 	void print(double n, int digits = 2)		{ printFloat(n, digits); }
 	void println(void);
@@ -135,7 +148,17 @@ class Print
 
 	void println(double n, int digits = 2)		{ print(n, digits); println(); }
   private:
-	void printNumber(unsigned long n, uint8_t base, uint8_t sign);
+	void printNumberDec(unsigned long n, uint8_t sign);
+	void printNumberHex(unsigned long n);
+	void printNumberBin(unsigned long n);
+	void printNumberAny(unsigned long n, uint8_t base);
+	inline size_t printNumber(unsigned long n, uint8_t sign, uint8_t base) __attribute__((always_inline)) {
+		if (base == 0) { write((uint8_t)n); return; }
+		if (base == 10 || base < 2) { printNumberDec(n, sign); return; }
+		if (base == 16) { printNumberHex(n); return; }
+		if (base == 2) { printNumberBin(n); return; }
+		printNumberAny(n, base);
+	}
 	void printFloat(double n, uint8_t digits);
 };
 #endif

@@ -32,6 +32,7 @@ public:
 	uint8_t numbits(void);
 	uint8_t dtr(void);
 	uint8_t rts(void);
+	operator bool();
 private:
 	int16_t peek_buf;
 };

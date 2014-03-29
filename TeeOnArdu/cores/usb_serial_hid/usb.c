@@ -445,8 +445,7 @@ uint8_t transmit_previous_timeout=0;
 // by the PC.  These are ignored, but kept in RAM because the
 // CDC spec requires a read that returns the current settings.
 volatile uint8_t cdc_line_coding[7]={0x00, 0xE1, 0x00, 0x00, 0x00, 0x00, 0x08};
-volatile uint8_t cdc_line_rtsdtr=0;
-//volatile uint8_t cdc_line_rtsdtr USBSTATE;
+volatile uint8_t cdc_line_rtsdtr USBSTATE;
 
 // byte0: which modifier keys are currently pressed
 //  1=left ctrl,    2=left shift,   4=left alt,    8=left gui

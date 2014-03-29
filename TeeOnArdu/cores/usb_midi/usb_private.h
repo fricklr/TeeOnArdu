@@ -39,6 +39,11 @@ extern "C"{
 
 #if defined(__AVR_ATmega32U4__) || defined(__AVR_AT90USB646__) || defined(__AVR_AT90USB1286__)
 
+// Some operating systems, especially Windows, may cache USB device
+// info.  Changes to the device name may not update on the same
+// computer unless the vendor or product ID numbers change, or the
+// "bcdDevice" revision code is increased.
+
 #define STR_PRODUCT             L"Teensy MIDI"
 #define ENDPOINT0_SIZE          64
 

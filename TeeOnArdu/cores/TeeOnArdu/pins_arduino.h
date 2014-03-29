@@ -41,6 +41,7 @@ const static uint8_t SCL  = CORE_SCL0_PIN;
 // depend on these to be zero?
 #define NOT_A_PORT 127
 #define NOT_A_PIN 127
+#define NOT_AN_INTERRUPT -1
 
 #define digitalPinToPort(P) (P)
 #define portInputRegister(P) ((volatile uint8_t *)((int)pgm_read_byte(digital_pin_table_PGM+(P)*2+1)))

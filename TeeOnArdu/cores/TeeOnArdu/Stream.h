@@ -49,8 +49,8 @@ class Stream : public Print
 	void clearReadError() { setReadError(0); }
   protected:
 	void setReadError(int err = 1) { read_error = err; }
-  private:
 	unsigned long _timeout;
+  private:
 	char read_error;
 	int timedRead();
 	int timedPeek();

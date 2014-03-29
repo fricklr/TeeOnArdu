@@ -7,6 +7,15 @@
 
 #define USB_MIDI_SYSEX_MAX 60  // maximum sysex length we can receive
 
+/*
+These were originally meant to allow programs written for
+Francois Best's MIDI library to be easily used with
+Teensy's usbMIDI which implements the same API.  However,
+the MIDI library definitions have changed, so these names
+now conflict.  They've never been documented (the PJRC web
+page documents usbMIDI.getType() in numbers) so they are
+now commented out so usbMIDI and the MIDI library can be
+used together without conflict.
 #define NoteOff 0
 #define NoteOn 1
 #define AfterTouchPoly 2
@@ -15,6 +24,7 @@
 #define AfterTouchChannel 5
 #define PitchBend 6
 #define SystemExclusive 7
+*/
 
 class usb_midi_class
 {
@@ -63,7 +73,7 @@ public:
 	inline void setHandleAfterTouch(void (*fptr)(uint8_t channel, uint8_t pressure)) {
 		handleAfterTouch = fptr;
 	};
-	inline void setHandlePitchChange(void (*fptr)(uint8_t channel, uint16_t pitch)) {
+	inline void setHandlePitchChange(void (*fptr)(uint8_t channel, int pitch)) {
 		handlePitchChange = fptr;
 	};
 	inline void setHandleRealTimeSystem(void (*fptr)(uint8_t realtimebyte)) {
@@ -84,7 +94,7 @@ private:
 	void (*handleControlChange)(uint8_t ch, uint8_t, uint8_t);
 	void (*handleProgramChange)(uint8_t ch, uint8_t);
 	void (*handleAfterTouch)(uint8_t ch, uint8_t);
-	void (*handlePitchChange)(uint8_t ch, uint16_t);
+	void (*handlePitchChange)(uint8_t ch, int pitch);
 	void (*handleRealTimeSystem)(uint8_t rtb);
 };
 
@@ -107,6 +117,7 @@ public:
 	virtual void write(uint8_t);
 #endif
 	using Print::write;
+	operator bool();
 	// Teensy extensions
 	void send_now(void);
 	uint32_t baud(void);

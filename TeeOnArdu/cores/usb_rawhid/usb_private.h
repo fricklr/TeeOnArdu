@@ -39,6 +39,12 @@ extern "C"{
 #define STR_DEBUG		L"Emulated Arduino Serial"
 #define ENDPOINT0_SIZE          64
 
+// Some operating systems, especially Windows, may cache USB device
+// info.  Changes to the device name may not update on the same
+// computer unless the vendor or product ID numbers change, or the
+// "bcdDevice" revision code is increased.
+
+
 #define RAWHID_INTERFACE	0
 #define RAWHID_TX_ENDPOINT	3
 #define RAWHID_TX_BUFFER	EP_DOUBLE_BUFFER

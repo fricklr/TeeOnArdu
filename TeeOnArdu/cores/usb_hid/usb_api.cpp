@@ -102,8 +102,38 @@ KEYCODE_TYPE usb_keyboard_class::unicode_to_keycode(uint16_t cpoint)
 		return 0;
 	}
 	#endif
-	#ifdef UNICODE_20AC
-		if (cpoint == 0x20AC) return UNICODE_20AC & 0x3FFF;
+	//#ifdef UNICODE_20AC
+	//if (cpoint == 0x20AC) return UNICODE_20AC & 0x3FFF;
+	//#endif
+	#ifdef KEYCODE_EXTRA00
+	if (cpoint == UNICODE_EXTRA00) return KEYCODE_EXTRA00 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA01
+	if (cpoint == UNICODE_EXTRA01) return KEYCODE_EXTRA01 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA02
+	if (cpoint == UNICODE_EXTRA02) return KEYCODE_EXTRA02 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA03
+	if (cpoint == UNICODE_EXTRA03) return KEYCODE_EXTRA03 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA04
+	if (cpoint == UNICODE_EXTRA04) return KEYCODE_EXTRA04 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA05
+	if (cpoint == UNICODE_EXTRA05) return KEYCODE_EXTRA05 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA06
+	if (cpoint == UNICODE_EXTRA06) return KEYCODE_EXTRA06 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA07
+	if (cpoint == UNICODE_EXTRA07) return KEYCODE_EXTRA07 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA08
+	if (cpoint == UNICODE_EXTRA08) return KEYCODE_EXTRA08 & 0x3FFF;
+	#endif
+	#ifdef KEYCODE_EXTRA09
+	if (cpoint == UNICODE_EXTRA09) return KEYCODE_EXTRA09 & 0x3FFF;
 	#endif
 	return 0;
 }
@@ -744,12 +774,12 @@ void usb_serial_class::send_now(void)
 
 uint32_t usb_serial_class::baud(void)
 {
-	return ((uint32_t)DEBUG_TX_SIZE * 1000 / DEBUG_TX_INTERVAL);
+	return ((uint32_t)DEBUG_TX_SIZE * 10000 / DEBUG_TX_INTERVAL);
 }
 
 uint8_t usb_serial_class::stopbits(void)
 {
-	return 0;
+	return 1;
 }
 
 uint8_t usb_serial_class::paritytype(void)
@@ -764,14 +794,19 @@ uint8_t usb_serial_class::numbits(void)
 
 uint8_t usb_serial_class::dtr(void)
 {
-	return 0;
+	return 1;
 }
 
 uint8_t usb_serial_class::rts(void)
 {
-	return 0;
+	return 1;
 }
 
+usb_serial_class::operator bool()
+{
+	if (usb_configuration) return true;
+	return false;
+}
 
 
 // Preinstantiate Objects //////////////////////////////////////////////////////

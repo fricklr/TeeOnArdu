@@ -90,6 +90,7 @@ int HardwareSerial::peek(void)
 	head = rx_buffer_head;
 	tail = rx_buffer_tail;
 	if (head == tail) return -1;
+	if (++tail >= RX_BUFFER_SIZE) tail = 0;
 	return rx_buffer[tail];
 }
 
@@ -188,6 +189,7 @@ ISR(USART1_TX_vect)
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
-// On Teensy the "Serial" object maps to USB.  If the user wants to
-// the UART, they need to instantiate this object themselves.
-// http://www.pjrc.com/teensy/td_uart.html
+HardwareSerial Serial1;
+
+
+

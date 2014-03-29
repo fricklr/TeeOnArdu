@@ -722,12 +722,12 @@ void usb_serial_class::send_now(void)
 
 uint32_t usb_serial_class::baud(void)
 {
-	return ((uint32_t)DEBUG_TX_SIZE * 1000 / DEBUG_TX_INTERVAL);
+	return ((uint32_t)DEBUG_TX_SIZE * 10000 / DEBUG_TX_INTERVAL);
 }
 
 uint8_t usb_serial_class::stopbits(void)
 {
-	return 0;
+	return 1;
 }
 
 uint8_t usb_serial_class::paritytype(void)
@@ -742,12 +742,18 @@ uint8_t usb_serial_class::numbits(void)
 
 uint8_t usb_serial_class::dtr(void)
 {
-	return 0;
+	return 1;
 }
 
 uint8_t usb_serial_class::rts(void)
 {
-	return 0;
+	return 1;
+}
+
+usb_serial_class::operator bool()
+{
+	if (usb_configuration) return true;
+	return false;
 }
 
 

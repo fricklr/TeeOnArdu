@@ -131,6 +131,57 @@ int usb_serial_class::read(void)
         return c;
 }
 
+#if ARDUINO >= 100
+size_t usb_serial_class::readBytes(char *buffer, size_t length)
+{
+	size_t count=0;
+	unsigned long startMillis;
+	uint8_t num, intr_state;
+
+	startMillis = millis();
+	if (length <= 0) return 0;
+	if (peek_buf >= 0) {
+		*buffer++ = peek_buf;
+		peek_buf = -1;
+		length--;
+		if (length == 0) return 1;
+		count = 1;
+	}
+	do {
+		intr_state = SREG;
+		cli();
+		if (!usb_configuration) {
+			SREG = intr_state;
+			break;
+		}
+		UENUM = CDC_RX_ENDPOINT;
+		if (!(UEINTX & (1<<RXOUTI))) {
+			SREG = intr_state;
+			break;
+		}
+		num = UEBCLX;
+		if (num > length) num = length;
+		for (uint8_t i=0; i < num; i++) {
+			*buffer++ = UEDATX; // TODO: unroll loop for speed
+		}
+		if (!(UEINTX & (1<<RWAL))) UEINTX = 0x6B;
+		SREG = intr_state;
+		count += num;
+		length -= num;
+		if (length == 0) return count;
+	} while(millis() - startMillis < _timeout);
+	setReadError();
+	return count;
+}
+#endif
+
+
+#if ARDUINO >= 100
+void usb_serial_class::flush()
+{
+	send_now();
+}
+#else
 // discard any buffered input
 void usb_serial_class::flush()
 {
@@ -147,6 +198,8 @@ void usb_serial_class::flush()
         }
 	peek_buf = -1;
 }
+#endif
+
 #if 0
 // transmit a character.
 void usb_serial_class::write(uint8_t c)
@@ -387,7 +440,7 @@ uint8_t usb_serial_class::rts(void)
 usb_serial_class::operator bool()
 {
 	if (usb_configuration &&
-	 (cdc_line_rtsdtr & (USB_SERIAL_DTR | USB_SERIAL_RTS))) {
+	  (cdc_line_rtsdtr & (USB_SERIAL_DTR | USB_SERIAL_RTS))) {
 		return true;
 	}
 	return false;

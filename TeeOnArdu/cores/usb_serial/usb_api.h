@@ -31,6 +31,9 @@ public:
 	uint8_t dtr(void);
 	uint8_t rts(void);
 	operator bool();
+#if ARDUINO >= 100
+	size_t readBytes(char *buffer, size_t length);
+#endif
 private:
 	int16_t peek_buf;
 };

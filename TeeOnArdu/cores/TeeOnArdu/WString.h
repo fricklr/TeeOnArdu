@@ -38,7 +38,7 @@
 // modified by Mikal Hart for his FlashString library
 class __FlashStringHelper;
 #ifndef F
-#define F(string_literal) (reinterpret_cast<__FlashStringHelper *>(PSTR(string_literal)))
+#define F(string_literal) ((const __FlashStringHelper *)(PSTR(string_literal)))
 #endif
 
 // An inherited class for holding the result of a concatenation.  These
@@ -63,6 +63,8 @@ public:
 	String(unsigned int, unsigned char base=10);
 	String(long, unsigned char base=10);
 	String(unsigned long, unsigned char base=10);
+	String(float num, unsigned char digits=2);
+	String(double num, unsigned char digits=2);
 	~String(void);
 
 	// memory management
@@ -87,20 +89,24 @@ public:
 	String & append(const char *cstr);
 	String & append(const __FlashStringHelper *pgmstr);
 	String & append(char c);
-	String & append(unsigned char c)		{return append((char)c);}
+	String & append(unsigned char c)		{return append((int)c);}
 	String & append(int num);
 	String & append(unsigned int num);
 	String & append(long num);
 	String & append(unsigned long num);
+	String & append(float num);
+	String & append(double num)			{return append((float)num);}
 	String & operator += (const String &rhs)	{return append(rhs);}
 	String & operator += (const char *cstr)		{return append(cstr);}
 	String & operator += (const __FlashStringHelper *pgmstr) {return append(pgmstr);}
 	String & operator += (char c)			{return append(c);}
-	String & operator += (unsigned char c)		{return append((char)c);}
+	String & operator += (unsigned char c)		{return append((int)c);}
 	String & operator += (int num)			{return append(num);}
 	String & operator += (unsigned int num)		{return append(num);}
 	String & operator += (long num)			{return append(num);}
 	String & operator += (unsigned long num)	{return append(num);}
+	String & operator += (float num)		{return append(num);}
+	String & operator += (double num)		{return append(num);}
 
 	// concatenate
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, const String &rhs);
@@ -112,15 +118,19 @@ public:
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, unsigned int num);
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, long num);
 	friend StringSumHelper & operator + (const StringSumHelper &lhs, unsigned long num);
+	friend StringSumHelper & operator + (const StringSumHelper &lhs, float num);
+	friend StringSumHelper & operator + (const StringSumHelper &lhs, double num);
 	String & concat(const String &str)		{return append(str);}
 	String & concat(const char *cstr)		{return append(cstr);}
 	String & concat(const __FlashStringHelper *pgmstr) {return append(pgmstr);}
 	String & concat(char c)				{return append(c);}
-	String & concat(unsigned char c)		{return append((char)c);}
+	String & concat(unsigned char c)		{return append((int)c);}
 	String & concat(int num)			{return append(num);}
 	String & concat(unsigned int num)		{return append(num);}
 	String & concat(long num)			{return append(num);}
 	String & concat(unsigned long num)		{return append(num);}
+	String & concat(float num)			{return append(num);}
+	String & concat(double num)			{return append(num);}
 
 	// comparison
 	int compareTo(const String &s) const;
@@ -150,6 +160,7 @@ public:
 	void getBytes(unsigned char *buf, unsigned int bufsize, unsigned int index=0) const;
 	void toCharArray(char *buf, unsigned int bufsize, unsigned int index=0) const
 		{getBytes((unsigned char *)buf, bufsize, index);}
+	const char * c_str() const { return buffer; }
 
 	// search
 	int indexOf( char ch ) const;
@@ -166,12 +177,15 @@ public:
 	// modification
 	String & replace(char find, char replace);
 	String & replace(const String& find, const String& replace);
+	String & remove(unsigned int index);
+	String & remove(unsigned int index, unsigned int count);
 	String & toLowerCase(void);
 	String & toUpperCase(void);
 	String & trim(void);
 
 	// parsing/conversion
 	long toInt(void) const;
+	float toFloat(void) const;
 
 protected:
 	char *buffer;	        // the actual char array

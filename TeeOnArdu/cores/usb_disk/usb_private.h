@@ -18,6 +18,11 @@ extern "C"{
 #define STR_PRODUCT		L"Teensy Disk/Keyboard"
 #define STR_SERIAL_NUMBER	L"123456789ABCDEF0"
 
+// Some operating systems, especially Windows, may cache USB device
+// info.  Changes to the device name may not update on the same
+// computer unless the vendor or product ID numbers change, or the
+// "bcdDevice" revision code is increased.
+
 #define TRANSMIT_FLUSH_TIMEOUT	4   /* in milliseconds */
 #define TRANSMIT_TIMEOUT	25   /* in milliseconds */
 

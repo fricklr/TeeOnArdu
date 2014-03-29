@@ -866,7 +866,7 @@ static inline void analogWrite(uint8_t pin, int val)
 				_SFR_BYTE(TCCR0A) &= ~(1<<COM0B1);
 			}
 		} else if (pin == CORE_OC1A_PIN) { //TIMER1A
-			CORE_DDRREG(CORE_OC0B_PIN) |= CORE_BITMASK(CORE_OC0B_PIN);
+			CORE_DDRREG(CORE_OC1A_PIN) |= CORE_BITMASK(CORE_OC1A_PIN);
 			OCR1A = val;
 			TCCR1A |= (1<<COM1A1);
 		} else if (pin == CORE_OC1B_PIN) { //TIMER1B

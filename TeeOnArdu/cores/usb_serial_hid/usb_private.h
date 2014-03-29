@@ -19,6 +19,12 @@ extern "C"{
 #define STR_PRODUCT             L"Serial+Keyboard+Mouse+Joystick"
 #define STR_SERIAL		L"Serial"
 
+// Some operating systems, especially Windows, may cache USB device
+// info.  Changes to the device name may not update on the same
+// computer unless the vendor or product ID numbers change, or the
+// "bcdDevice" revision code is increased.
+
+
 // All USB serial devices are supposed to have a serial number
 // (according to Microsoft).  On windows, a new COM port is created
 // for every unique serial/vendor/product number combination.  If

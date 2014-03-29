@@ -39,9 +39,9 @@
 #include <string.h>
 #include <avr/io.h>
 
-
-#define __MALLOC_MARGIN__ 120
-
+extern char __heap_start;
+extern char __heap_end;
+#define STACK_POINTER() ((char *)AVR_STACK_POINTER_REG)
 
 struct __freelist {
 	size_t sz;
@@ -59,12 +59,16 @@ struct __freelist {
  * with the data segment.
  */
  
+size_t __malloc_margin = 128;
+char *__malloc_heap_start = &__heap_start;
+char *__malloc_heap_end = &__heap_end;
 
-#define STACK_POINTER() ((char *)AVR_STACK_POINTER_REG)
-extern char __heap_start;
-char *__brkval = &__heap_start;	// first location not yet allocated
+char *__brkval = NULL;	// first location not yet allocated
 struct __freelist *__flp;	// freelist pointer (head of freelist)
-char *__brkval_maximum = 0;
+
+// this is useful for tracking the worst case memory allocation
+//char *__brkval_maximum = 0;
+
 
 void *
 malloc(size_t len)
@@ -160,7 +164,11 @@ malloc(size_t len)
 	 * Since we don't have an operating system, just make sure
 	 * that we don't collide with the stack.
 	 */
-	cp = STACK_POINTER() - __MALLOC_MARGIN__;
+	if (__brkval == 0)
+		__brkval = __malloc_heap_start;
+	cp = __malloc_heap_end;
+	if (cp == 0)
+		cp = STACK_POINTER() - __malloc_margin;
 	if (cp <= __brkval)
 	  /*
 	   * Memory exhausted.
@@ -173,7 +181,7 @@ malloc(size_t len)
 	if (avail >= len && avail >= len + sizeof(size_t)) {
 		fp1 = (struct __freelist *)__brkval;
 		__brkval += len + sizeof(size_t);
-		__brkval_maximum = __brkval;
+		//__brkval_maximum = __brkval;
 		fp1->sz = len;
 		return &(fp1->nx);
 	}
@@ -356,10 +364,10 @@ realloc(void *ptr, size_t len)
 	 */
 	if (__brkval == (char *)ptr + fp1->sz && len > s) {
 		cp = (char *)ptr + len;
-		cp1 = STACK_POINTER() - __MALLOC_MARGIN__;
+		cp1 = STACK_POINTER() - __malloc_margin;
 		if (cp < cp1) {
 			__brkval = cp;
-			__brkval_maximum = cp;
+			//__brkval_maximum = cp;
 			fp1->sz = len;
 			return ptr;
 		}

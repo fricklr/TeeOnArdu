@@ -33,6 +33,7 @@ class usb_serial_class : public Stream
 	virtual void write(uint8_t);
 #endif
 	using Print::write;
+	operator bool();
 	// Teensy extensions
 	void send_now(void);
 	uint32_t baud(void);

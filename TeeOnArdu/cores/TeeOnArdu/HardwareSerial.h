@@ -25,4 +25,6 @@ public:
 	using Print::write;
 };
 
+extern HardwareSerial Serial1;
+
 #endif
