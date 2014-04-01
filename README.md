@@ -10,7 +10,7 @@ In workshops and classes i teach electronics and programming for artistic purpos
 Why USB_MIDI?
 -------------
 For example Arduino and Pure Data work quite well together through Arduinos serial interface, but many sound softwares need extra software running as a proxy to work with Arduino. Most of them understand MIDI for input and output. So in 2011 with friends i designed and built a board the [Kaputtverboten](http://kaputverboten.com/) based on [V-USB](http://www.obdev.at/products/vusb/index.html) and configurable via MIDI. It worked very well and we even gave a workshop with it at the [Pure Data Convention 2011](http://www.uni-weimar.de/medien/wiki/PDCON:Workshops/Build_your_own_USB-MIDI-Interface) but we never wanted to sell it apart from the workshops. And with the introduction of the Leonardo i thought there would be finally an Arduino that talks MIDI out of the box.
-With the arrival of Arduino Leonardo with it's ATMega32u4 it could have been possible to have a USB-MIDI Device developed directly inside the Arduino IDE but the Arduino Team only implemented keyboard and mouse functionality from the USB-HID (Human Interface Device) family.
+With the arrival of Arduino Leonardo with it's ATMega32u4 it could have been possible to have a USB-MIDI Device developed directly inside the Arduino IDE but the Arduino Team only implemented keyboard and mouse functionality.
 
 Current situation
 -----------------
@@ -18,7 +18,7 @@ So there was no possibility to turn the Leonardo easily into a USB-MIDI device. 
 
 Solution
 --------
-After waiting for years to have somebody fill the gap i sat down and tackled the problem myself. I knew it should be possible since the [Teensy](http://www.pjrc.com/teensy/) environment shows that it could be done. The Teensy 2.0 has the same ATMega32u4 Processor as the the Leonardo. And there is even the possibility to program Teensy boards as USB HID Devices including MIDI with the Arduino IDE ([Teensyduino](http://www.pjrc.com/teensy/teensyduino.html))
+After waiting for years to have somebody fill the gap i sat down and tackled the problem myself. I knew it should be possible since the [Teensy](http://www.pjrc.com/teensy/) environment shows that it could be done. The Teensy 2.0 has the same ATMega32u4 Processor as the the Leonardo. And there is the possibility to program Teensy boards as USB HID devices and USB MIDI devices with the Arduino IDE ([Teensyduino](http://www.pjrc.com/teensy/teensyduino.html))
 The compiled .hex files from Teensyduino for Teensy 2.0 can be programmed onto the Leonardo with an ISP programmer but that is a rather complicated procedure compared to usual Arduino programming.
 
 After trying different routes to include USB MIDI into Leonardo i decided to create a custom board config file and core from Teensy that can be easily placed inside the Arduino>Hardware folder in your home directory. As a side effect you can now use all Teensyduino code for Teensy 2.0 on the Leonardo hardware not only MIDI. Obviously this has to be called "TeeOnArdu".
