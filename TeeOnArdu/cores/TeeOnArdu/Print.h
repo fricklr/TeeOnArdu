@@ -22,6 +22,7 @@
 
 #include <inttypes.h>
 #include <stdio.h> // for size_t
+#include <stdarg.h>
 #include "core_id.h"
 #include "WString.h"
 #include "Printable.h"
@@ -42,6 +43,7 @@ class Print
 	virtual size_t write(uint8_t b);
 	size_t write(const char *str)			{ return write((const uint8_t *)str, strlen(str)); }
 	virtual size_t write(const uint8_t *buffer, size_t size);
+	size_t write(const char *buffer, size_t size)   { return write((const uint8_t *)buffer, size); }
 	size_t print(const String &s);
 	size_t print(char c)				{ return write((uint8_t)c); }
 	size_t print(const char s[])			{ return write(s); }
@@ -83,6 +85,8 @@ class Print
 	size_t println(const Printable &obj)		{ return obj.printTo(*this) + println(); }
 	int getWriteError() { return write_error; }
 	void clearWriteError() { setWriteError(0); }
+	int printf(const char *format, ...);
+	int printf(const __FlashStringHelper *format, ...);
   protected:
 	void setWriteError(int err = 1) { write_error = err; }
   private:
