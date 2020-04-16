@@ -1,5 +1,5 @@
 I keep this as kind of a memorial 😎, but please note that **this code is no longer maintained**. 
-It has been very useful several years ago. But now please use https://github.com/arduino-libraries/MIDIUSB.
+It has been very useful several years ago. But now please use https://github.com/arduino-libraries/MIDIUSB or https://github.com/tttapa/MIDI_controller.
 
 
 TeeOnArdu
